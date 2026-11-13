@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>শিরোনাম পত্র Helper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1 class="bangla page-title">শিরোনাম পত্র</h1>
+
+    <details class="no-print instructions" lang="en">
+      <summary><b>View Instructions</b></summary>
+      <ol>
+        <li>Enter or paste all roll numbers copied from the Excel sheet, then click <b>Process</b>.</li>
+        <li>Choose <b>Absent</b> or <b>OMR Mistake</b>, then click a roll in the Present list.</li>
+        <li>Click a roll in the Absent or OMR list to remove that mark.</li>
+        <li>Use the copy buttons to copy the Present, Absent, or OMR roll list.</li>
+        <li>The date defaults to today. Choose the scheduled exam date and time above the sheet if they are different; the weekday updates automatically.</li>
+      </ol>
+    </details>
+
+    <section class="controls no-print" lang="en" aria-labelledby="input-heading">
+      <h2 id="input-heading">1. Enter Rolls</h2>
+      <div class="control-row control-row-top">
+        <label for="digit-inp">Digits per roll:</label>
+        <input type="number" id="digit-inp" min="6" max="10" step="4" inputmode="numeric">
+        <button type="button" id="save-digit" class="btn">Save</button>
+        <small id="digit-help">Choose 6 or 10; Save applies that exact length to every roll.</small>
+        <button type="button" id="paste">Clear, Paste and Process</button>
+      </div>
+
+      <label for="rolls">Roll numbers (spaces, commas, tabs, or new lines are accepted)</label>
+      <textarea id="rolls" rows="5" spellcheck="false" aria-describedby="roll-help" placeholder="Paste rolls here; each must match the saved digit count"></textarea>
+      <small id="roll-help">Duplicate rolls and numbers with the wrong digit count will be reported.</small>
+      <div class="process-row">
+        <button type="button" id="process"><b>2. Process</b></button>
+        <span>Total students: <output id="stdCount" aria-live="polite">0</output></span>
+      </div>
+    </section>
+
+    <section class="resultContainer no-print" lang="en" aria-labelledby="action-heading">
+      <h2 id="action-heading">3. Select Action</h2>
+      <div class="action-buttons" role="group" aria-label="Choose an action">
+        <button type="button" class="btn selected" id="absent" aria-pressed="true">Absent</button>
+        <button type="button" class="btn" id="wrongOmr" aria-pressed="false">OMR Mistake</button>
+      </div>
+
+      <p class="list-heading">
+        <span>Present students: <strong id="presentCount" aria-live="polite">0</strong></span>
+        <button type="button" class="copyBtn" data-copy="present">Copy All Present Rolls</button>
+      </p>
+      <div id="rollsContainer" class="numbers" aria-label="Present roll numbers"></div>
+
+      <section class="searchContainer" aria-labelledby="search-heading">
+        <h3 id="search-heading">Search and apply selected action</h3>
+        <label for="searchInput">Enter one or multiple rolls</label>
+        <div class="search-row">
+          <input type="text" placeholder="Roll number(s)" id="searchInput" autocomplete="off" spellcheck="false">
+          <button type="button" id="searchBtn">Search &amp; apply Action</button>
+        </div>
+        <p class="searchlog">Search Log: <span id="searchLog" aria-live="polite"></span></p>
+      </section>
+
+      <p class="list-heading">
+        <span>Absent students: <strong id="absentCount" aria-live="polite">0</strong></span>
+        <button type="button" class="copyBtn" data-copy="absent">Copy All Absent Rolls</button>
+      </p>
+      <div id="absentRollsContainer" class="numbers" aria-label="Absent roll numbers"></div>
+
+      <p class="list-heading">
+        <span>OMR mistakes: <strong id="mistakeCount" aria-live="polite">0</strong></span>
+        <button type="button" class="copyBtn" data-copy="omr">Copy All OMR Mistaken Rolls</button>
+      </p>
+      <div id="wrongOmrRollsContainer" class="numbers" aria-label="OMR mistake roll numbers"></div>
+      <p id="copyStatus" class="status-message" aria-live="polite"></p>
+    </section>
+
+    <section class="date-control no-print" lang="en" aria-labelledby="date-heading">
+      <h2 id="date-heading">Exam date</h2>
+      <div class="date-time-controls">
+        <div>
+          <label for="exam-date">Select the exam date (defaults to today)</label>
+          <input type="date" id="exam-date">
+        </div>
+        <div>
+          <label for="exam-time">Select the exam time</label>
+          <input type="time" id="exam-time" value="10:00">
+        </div>
+      </div>
+      <p>The Bengali date, weekday, and time on the sheet update automatically.</p>
+      <button type="button" id="printBtn">Print</button>
+    </section>
+
+    <p class="no-print note" lang="en"><b>Before printing:</b> Update the editable subject, subject code, and centre details on the sheet. The browser's print preview itself is not editable. The exam date, weekday, and time come from the controls above.</p>
+
+    <div class="print-wrapper">
+      <section id="printableDiv" class="print-sheet" lang="bn" aria-label="শিরোনাম পত্র">
+        <div id="printable" class="bangla">
+          <div class="header-container">
+            <p class="board-name">বাংলাদেশ কারিগরি শিক্ষা বোর্ড, ঢাকা</p>
+            <p class="board-subtitle">উত্তর পত্রের কভার পৃষ্ঠার প্রতিটি বাক্সের জন্য প্রথম অংশের</p>
+            <p class="sheet-title"><u>শিরোনাম পত্র</u></p>
+          </div>
+
+          <table class="exam-details">
+            <tbody>
+              <tr>
+                <td>পরীক্ষার নামঃ</td>
+                <td contenteditable="true" spellcheck="false">ডিপ্লোমা ইন ইঞ্জিনিয়ারিং</td>
+              </tr>
+              <tr>
+                <td class="nowrap">পরীক্ষা কেন্দ্রঃ</td>
+                <td contenteditable="true" spellcheck="false">কক্সবাজার সরকারি পলিটেকনিক ইনস্টিটিউট, কক্সবাজার</td>
+                <td contenteditable="true" spellcheck="false">কেন্দ্র কোডঃ ৭৪০০৯</td>
+              </tr>
+              <tr>
+                <td>পরীক্ষার বিষয়ঃ</td>
+                <td class="edit" contenteditable="true" spellcheck="false" aria-label="পরীক্ষার বিষয়"></td>
+                <td class="edit" contenteditable="true" spellcheck="false">বিষয় কোডঃ 00000</td>
+              </tr>
+              <tr>
+                <td>পরীক্ষার তারিখঃ</td>
+                <td id="exam-date-display" class="date-display" aria-live="polite"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p class="roll-heading">বাক্সের প্রথম অংশের রোল নম্বর সমুহঃ</p>
+          <div id="present-roll" class="p-roll-container edit"></div>
+          <p class="count-line"><span class="p-presentCount">০</span></p>
+
+          <div class="col2">
+            <p>ভুল বৃত্ত ভরাটকৃত রোল নম্বর সমুহ (সঠিকটি)</p>
+            <p><span id="p-omrCount">০</span> টি</p>
+          </div>
+          <div id="omr-roll" class="p-roll-container"></div>
+
+          <div class="col2">
+            <p>অনুপস্থিত পরীক্ষার্থীর রোল নম্বর সমুহ (প্রতিটি লিখতে হবে)</p>
+            <p><span id="p-absentCount">০</span> টি</p>
+          </div>
+          <div id="absent-roll" class="p-roll-container"></div>
+
+          <div class="col2 expelled-row">
+            <p>বহিষ্কৃত/অভিযুক্ত পরীক্ষার্থীর রোল নম্বর সমুহ (প্রতিটি লিখতে হবে)</p>
+            <p>নাই ।</p>
+          </div>
+
+          <div class="col2 w-50">
+            <p>উপস্থিত পরীক্ষার্থীর সংখ্যাঃ</p>
+            <p><span class="p-presentCount">০</span> জন।</p>
+          </div>
+
+          <div class="col2 w-50">
+            <p>প্রেরিত বাক্সের প্রথম অংশের সংখ্যা</p>
+            <p><span class="p-presentCount">০</span> টি</p>
+          </div>
+
+          <div class="col2 signature-row">
+            <p>প্রস্তুত কারীর স্বাক্ষর</p>
+            <p class="signature-text">পরীক্ষা কেন্দ্রের ভারপ্রাপ্ত কর্মকর্তা/কেন্দ্র<br>সচিব এর স্বাক্ষর ও সীলমোহর</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script src="./script.js"></script>
+</body>
+</html>
